@@ -1,11 +1,22 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
+import axios from "axios";
+
 import { loginUser } from "@/features/auth/services/authService";
+import useAuthStore from "@/features/auth/store/authStore";
 
 export default function LoginForm() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const router = useRouter();
+
+  const { setUser } = useAuthStore();
+
+  const [email, setEmail] =
+    useState("");
+
+  const [password, setPassword] =
+    useState("");
 
   const handleSubmit = async (
     e: React.FormEvent<HTMLFormElement>
@@ -13,14 +24,28 @@ export default function LoginForm() {
     e.preventDefault();
 
     try {
-      const data = await loginUser({
-        email,
-        password,
-      });
+    const response =
+  await loginUser({
+    email,
+    password,
+  });
 
-      console.log(data);
+const { user, token } =
+  response.data;
+
+      setUser(user, token);
+
+      router.push("/");
     } catch (error) {
-      console.error(error);
+      if (
+        axios.isAxiosError(error)
+      ) {
+        console.error(
+          error.response?.data
+        );
+      } else {
+        console.error(error);
+      }
     }
   };
 
@@ -33,21 +58,27 @@ export default function LoginForm() {
         <input
           type="email"
           placeholder="Email"
+          autoComplete="email"
           value={email}
           onChange={(e) =>
             setEmail(e.target.value)
           }
           className="border p-2 rounded"
+          required
         />
 
         <input
           type="password"
           placeholder="Password"
+          autoComplete="current-password"
           value={password}
           onChange={(e) =>
-            setPassword(e.target.value)
+            setPassword(
+              e.target.value
+            )
           }
           className="border p-2 rounded"
+          required
         />
 
         <button
