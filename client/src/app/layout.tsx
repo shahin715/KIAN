@@ -7,8 +7,6 @@ import {
 
 import "./globals.css";
 
-import MainLayout from "@/components/layout/MainLayout";
-
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -54,9 +52,7 @@ export default function RootLayout({
           font-(--font-assistant)
         "
       >
-        <MainLayout>
-          {children}
-        </MainLayout>
+        {children}
       </body>
     </html>
   );

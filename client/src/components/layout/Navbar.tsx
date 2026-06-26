@@ -1,8 +1,8 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-
 import {
   Search,
   ShoppingBag,
@@ -10,10 +10,16 @@ import {
 } from "lucide-react";
 
 import Container from "@/components/layout/Container";
+import NavDropdown from "@/components/layout/NavDropdown";
+import SearchOverlay from "@/components/layout/SearchOverlay";
+import { navigation } from "@/constants/navigation";
 import useAuthStore from "@/features/auth/store/authStore";
 
 export default function Navbar() {
   const router = useRouter();
+
+  const [searchOpen, setSearchOpen] =
+    useState(false);
 
   const {
     isAuthenticated,
@@ -26,130 +32,120 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="bg-[#121212] text-white border-b border-white/10">
-      <Container>
-        {/* Logo */}
-        <div className="flex justify-center pt-4 pb-4">
-          <Link
-            href="/"
-            className="
-              text-[24px]
-              font-semibold
-              tracking-[10px]
-              uppercase
-              hover:opacity-80
-              transition
-            "
-          >
-            KIAN
-          </Link>
-        </div>
-
-        {/* Menu Row */}
-        <div className="grid grid-cols-[auto_1fr_auto] items-center h-[60px]">
-          {/* Left */}
-          <div className="flex items-center justify-start pl-8 gap-5">
-            <button className="hover:opacity-70 transition">
-              <Search
-                size={24}
-                strokeWidth={1.5}
-              />
-            </button>
-          </div>
-
-          {/* Center */}
-          <div
-            className="
-              flex
-              items-center
-              justify-center
-              gap-10
-              text-[14px]
-              tracking-[0.5px]
-              whitespace-nowrap
-            "
-          >
+    <>
+      <nav className="bg-[#222222] text-white border-b border-white/10">
+        <Container>
+          {/* Logo */}
+          <div className="flex justify-center py-4">
             <Link
               href="/"
               className="
-                text-white
-                border-b
-                border-white
-                pb-1
+                text-[24px]
+                font-semibold
+                tracking-[6px]
+                uppercase
+                hover:opacity-80
+                transition
               "
             >
-              Home
+              KIAN
             </Link>
-
-            <button className="text-white/75 hover:text-white transition">
-              Men
-            </button>
-
-            <button className="text-white/75 hover:text-white transition">
-              Women
-            </button>
-
-            <button className="text-white/75 hover:text-white transition">
-              Punjabi
-            </button>
-
-            <button className="text-white/75 hover:text-white transition">
-              Kids
-            </button>
-
-            <button className="text-white/75 hover:text-white transition">
-              Accessories
-            </button>
-
-            <button className="text-white/75 hover:text-white transition">
-              Watches
-            </button>
-
-            <button className="text-white/75 hover:text-white transition">
-              Shoes
-            </button>
-
-            <button className="text-white/75 hover:text-white transition">
-              Others
-            </button>
           </div>
 
-          {/* Right */}
-          <div className="flex items-center justify-end gap-5">
-            {isAuthenticated ? (
+          {/* Menu Row */}
+          <div className="grid grid-cols-[120px_1fr_120px] items-center h-15">
+            {/* Left */}
+            <div className="flex justify-start">
               <button
-                onClick={handleLogout}
+                onClick={() =>
+                  setSearchOpen(true)
+                }
                 className="hover:opacity-70 transition"
               >
-                <User
+                <Search
                   size={24}
                   strokeWidth={1.5}
                 />
               </button>
-            ) : (
+            </div>
+
+            {/* Center Menu */}
+            <div
+              className="
+                flex
+                items-center
+                justify-center
+                gap-6
+                text-[13px]
+                tracking-[0.5px]
+                whitespace-nowrap
+              "
+            >
               <Link
-                href="/login"
+                href="/"
+                className="
+                  text-white
+                  border-b
+                  border-white
+                  pb-1
+                "
+              >
+                Home
+              </Link>
+
+              {navigation.map((menu) => (
+                <NavDropdown
+                  key={menu.name}
+                  title={menu.name}
+                  items={menu.items}
+                />
+              ))}
+            </div>
+
+            {/* Right */}
+            <div className="flex justify-end items-center gap-5">
+              {isAuthenticated ? (
+                <button
+                  onClick={handleLogout}
+                  className="hover:opacity-70 transition"
+                >
+                  <User
+                    size={24}
+                    strokeWidth={1.5}
+                  />
+                </button>
+              ) : (
+                <Link
+                  href="/login"
+                  className="hover:opacity-70 transition"
+                >
+                  <User
+                    size={24}
+                    strokeWidth={1.5}
+                  />
+                </Link>
+              )}
+
+              <Link
+                href="/cart"
                 className="hover:opacity-70 transition"
               >
-                <User
+                <ShoppingBag
                   size={24}
                   strokeWidth={1.5}
                 />
               </Link>
-            )}
-
-            <Link
-              href="/cart"
-              className="hover:opacity-70 transition"
-            >
-              <ShoppingBag
-                size={24}
-                strokeWidth={1.5}
-              />
-            </Link>
+            </div>
           </div>
-        </div>
-      </Container>
-    </nav>
+        </Container>
+      </nav>
+
+      <SearchOverlay
+        isOpen={searchOpen}
+        onClose={() =>
+          setSearchOpen(false)
+        }
+      />
+    </>
   );
 }
