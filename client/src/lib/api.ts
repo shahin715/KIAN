@@ -88,3 +88,104 @@ export async function deleteCategory(
 
   return response.json();
 }
+export async function getProducts() {
+  const response = await fetch(
+    `${API_URL}/products`
+  );
+
+  if (!response.ok) {
+    throw new Error(
+      "Failed to fetch products"
+    );
+  }
+
+  return response.json();
+}
+
+export async function createProduct(
+  name: string,
+  sku: string,
+  price: number,
+  stock: number,
+  categoryId: string
+) {
+  const response = await fetch(
+    `${API_URL}/products`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type":
+          "application/json",
+      },
+      body: JSON.stringify({
+        name,
+        sku,
+        price,
+        stock,
+        categoryId,
+      }),
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error(
+      "Failed to create product"
+    );
+  }
+
+  return response.json();
+}
+
+export async function updateProduct(
+  id: string,
+  name: string,
+  sku: string,
+  price: number,
+  stock: number,
+  categoryId: string
+) {
+  const response = await fetch(
+    `${API_URL}/products/${id}`,
+    {
+      method: "PATCH",
+      headers: {
+        "Content-Type":
+          "application/json",
+      },
+      body: JSON.stringify({
+        name,
+        sku,
+        price,
+        stock,
+        categoryId,
+      }),
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error(
+      "Failed to update product"
+    );
+  }
+
+  return response.json();
+}
+
+export async function deleteProduct(
+  id: string
+) {
+  const response = await fetch(
+    `${API_URL}/products/${id}`,
+    {
+      method: "DELETE",
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error(
+      "Failed to delete product"
+    );
+  }
+
+  return response.json();
+}
