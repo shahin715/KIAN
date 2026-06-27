@@ -19,6 +19,53 @@ model User {
   updatedAt DateTime @updatedAt
 }
 
+model Category {
+  id        String   @id @default(uuid())
+
+  name      String
+  slug      String   @unique
+
+  image     String?
+
+  isActive  Boolean  @default(true)
+
+  sortOrder Int      @default(0)
+
+  products  Product[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("categories")
+}
+
+model Product {
+  id          String   @id @default(uuid())
+
+  name        String
+  slug        String   @unique
+
+  sku         String   @unique
+
+  description String?
+
+  price       Float
+
+  stock       Int      @default(0)
+
+  image       String?
+
+  isActive    Boolean  @default(true)
+
+  categoryId  String
+  category    Category @relation(fields: [categoryId], references: [id])
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("products")
+}
+
 enum Role {
   ADMIN
   CUSTOMER
