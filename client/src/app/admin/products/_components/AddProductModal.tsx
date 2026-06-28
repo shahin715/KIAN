@@ -38,6 +38,9 @@ export default function AddProductModal({
   const [stock, setStock] =
     useState("");
 
+  const [image, setImage] =
+    useState<File | null>(null);
+
   const [
     categoryId,
     setCategoryId,
@@ -80,12 +83,43 @@ export default function AddProductModal({
       try {
         setLoading(true);
 
-        await createProduct(
-          name,
-          sku,
-          Number(price),
-          Number(stock),
+        const formData =
+          new FormData();
+
+        formData.append(
+          "name",
+          name
+        );
+
+        formData.append(
+          "sku",
+          sku
+        );
+
+        formData.append(
+          "price",
+          price
+        );
+
+        formData.append(
+          "stock",
+          stock
+        );
+
+        formData.append(
+          "categoryId",
           categoryId
+        );
+
+        if (image) {
+          formData.append(
+            "image",
+            image
+          );
+        }
+
+        await createProduct(
+          formData
         );
 
         setName("");
@@ -93,6 +127,7 @@ export default function AddProductModal({
         setPrice("");
         setStock("");
         setCategoryId("");
+        setImage(null);
 
         onSuccess();
         onClose();
@@ -148,11 +183,8 @@ export default function AddProductModal({
               )
             }
             className="
-              w-full
-              border
-              rounded
-              px-3
-              py-2
+              w-full border rounded
+              px-3 py-2
             "
             required
           />
@@ -167,11 +199,8 @@ export default function AddProductModal({
               )
             }
             className="
-              w-full
-              border
-              rounded
-              px-3
-              py-2
+              w-full border rounded
+              px-3 py-2
             "
             required
           />
@@ -186,11 +215,8 @@ export default function AddProductModal({
               )
             }
             className="
-              w-full
-              border
-              rounded
-              px-3
-              py-2
+              w-full border rounded
+              px-3 py-2
             "
             required
           />
@@ -205,11 +231,8 @@ export default function AddProductModal({
               )
             }
             className="
-              w-full
-              border
-              rounded
-              px-3
-              py-2
+              w-full border rounded
+              px-3 py-2
             "
             required
           />
@@ -222,11 +245,8 @@ export default function AddProductModal({
               )
             }
             className="
-              w-full
-              border
-              rounded
-              px-3
-              py-2
+              w-full border rounded
+              px-3 py-2
             "
             required
           >
@@ -248,21 +268,32 @@ export default function AddProductModal({
             )}
           </select>
 
+          <input
+            type="file"
+            accept="image/*"
+            onChange={(e) =>
+              setImage(
+                e.target.files?.[0] ||
+                  null
+              )
+            }
+            className="
+              w-full border rounded
+              px-3 py-2
+            "
+          />
+
           <div
             className="
-              flex
-              justify-end
-              gap-2
-              pt-2
+              flex justify-end
+              gap-2 pt-2
             "
           >
             <button
               type="button"
               onClick={onClose}
               className="
-                border
-                px-4
-                py-2
+                border px-4 py-2
                 rounded
               "
             >
@@ -273,11 +304,8 @@ export default function AddProductModal({
               type="submit"
               disabled={loading}
               className="
-                bg-black
-                text-white
-                px-4
-                py-2
-                rounded
+                bg-black text-white
+                px-4 py-2 rounded
               "
             >
               {loading

@@ -88,6 +88,7 @@ export async function deleteCategory(
 
   return response.json();
 }
+
 export async function getProducts() {
   const response = await fetch(
     `${API_URL}/products`
@@ -103,27 +104,13 @@ export async function getProducts() {
 }
 
 export async function createProduct(
-  name: string,
-  sku: string,
-  price: number,
-  stock: number,
-  categoryId: string
+  formData: FormData
 ) {
   const response = await fetch(
     `${API_URL}/products`,
     {
       method: "POST",
-      headers: {
-        "Content-Type":
-          "application/json",
-      },
-      body: JSON.stringify({
-        name,
-        sku,
-        price,
-        stock,
-        categoryId,
-      }),
+      body: formData,
     }
   );
 
@@ -138,27 +125,13 @@ export async function createProduct(
 
 export async function updateProduct(
   id: string,
-  name: string,
-  sku: string,
-  price: number,
-  stock: number,
-  categoryId: string
+  formData: FormData
 ) {
   const response = await fetch(
     `${API_URL}/products/${id}`,
     {
       method: "PATCH",
-      headers: {
-        "Content-Type":
-          "application/json",
-      },
-      body: JSON.stringify({
-        name,
-        sku,
-        price,
-        stock,
-        categoryId,
-      }),
+      body: formData,
     }
   );
 
