@@ -1,126 +1,105 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useRef, useState } from "react";
+import Link from "next/link";
 
 interface NavDropdownProps {
   title: string;
+  slug: string;
   items: string[];
 }
 
 export default function NavDropdown({
   title,
+  slug,
   items,
 }: NavDropdownProps) {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] =
+    useState(false);
 
-  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const timeoutRef =
+    useRef<NodeJS.Timeout | null>(
+      null
+    );
 
   const handleMouseEnter = () => {
     if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current);
+      clearTimeout(
+        timeoutRef.current
+      );
     }
 
     setOpen(true);
   };
 
   const handleMouseLeave = () => {
-    timeoutRef.current = setTimeout(() => {
-      setOpen(false);
-    }, 200);
+    timeoutRef.current =
+      setTimeout(() => {
+        setOpen(false);
+      }, 200);
   };
 
   return (
     <div
-      style={{
-        position: "relative",
-      }}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
+      className="relative"
+      onMouseEnter={
+        handleMouseEnter
+      }
+      onMouseLeave={
+        handleMouseLeave
+      }
     >
-      <button
-        style={{
-          color: "rgba(255,255,255,0.75)",
-          background: "transparent",
-          border: "none",
-          cursor: "pointer",
-          fontSize: "13px",
-          letterSpacing: "0.5px",
-        }}
+      <Link
+        href={`/categories/${slug}`}
+        className="
+          text-white/75
+          hover:text-white
+          transition
+          text-[13px]
+          tracking-[0.5px]
+        "
       >
         {title}
-      </button>
+      </Link>
 
-      {open && items.length > 0 && (
-        <div
-          style={{
-            position: "absolute",
-            top: "100%",
-            left: "50%",
-            transform: "translateX(-50%)",
-            marginTop: "4px",
-
-            width: "320px",
-
-            backgroundColor: "#ffffff",
-
-            borderRadius: "4px",
-
-            boxShadow:
-              "0 12px 32px rgba(0,0,0,0.12)",
-
-            paddingTop: "12px",
-            paddingBottom: "12px",
-
-            zIndex: 999,
-          }}
-        >
-          {items.map((item: string) => (
-            <button
-              key={item}
-              style={{
-                display: "block",
-                width: "100%",
-
-                textAlign: "left",
-
-                paddingLeft: "40px",
-                paddingRight: "40px",
-
-                paddingTop: "10px",
-                paddingBottom: "10px",
-
-                fontSize: "16px",
-                fontWeight: 400,
-
-                color: "#5f6368",
-
-                background: "transparent",
-                border: "none",
-
-                cursor: "pointer",
-
-                transition: "all 0.2s ease",
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor =
-                  "#f8f8f8";
-
-                e.currentTarget.style.color =
-                  "#111111";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor =
-                  "transparent";
-
-                e.currentTarget.style.color =
-                  "#5f6368";
-              }}
-            >
-              {item}
-            </button>
-          ))}
-        </div>
-      )}
+      {open &&
+        items.length > 0 && (
+          <div
+            className="
+              absolute
+              top-full
+              left-1/2
+              -translate-x-1/2
+              mt-1
+              w-80
+              bg-white
+              rounded
+              shadow-xl
+              py-3
+              z-50
+            "
+          >
+            {items.map((item) => (
+              <button
+                key={item}
+                className="
+                  block
+                  w-full
+                  text-left
+                  px-10
+                  py-2.5
+                  text-base
+                  text-gray-600
+                  hover:bg-gray-100
+                  hover:text-black
+                  transition
+                "
+              >
+                {item}
+              </button>
+            ))}
+          </div>
+        )}
     </div>
   );
 }

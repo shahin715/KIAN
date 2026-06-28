@@ -1,12 +1,12 @@
 import { Request, Response } from "express";
 
 import {
-  createProduct,
-  getProducts,
-  getProductsByCategorySlug,
-  updateProduct,
-  deleteProduct,
-} from "./product.service";
+  createSubCategory,
+  getSubCategories,
+  getSubCategoriesByCategory,
+  updateSubCategory,
+  deleteSubCategory,
+} from "./sub-category.service";
 
 export const create = async (
   req: Request,
@@ -15,29 +15,18 @@ export const create = async (
   try {
     const {
       name,
-      sku,
-      price,
-      stock,
       categoryId,
     } = req.body;
 
-    const image = req.file
-      ? `/uploads/products/${req.file.filename}`
-      : null;
-
-    const product =
-      await createProduct(
+    const subCategory =
+      await createSubCategory(
         name,
-        sku,
-        Number(price),
-        Number(stock),
-        categoryId,
-        image
+        categoryId
       );
 
     res.status(201).json({
       success: true,
-      data: product,
+      data: subCategory,
     });
   } catch (error) {
     res.status(400).json({
@@ -55,12 +44,12 @@ export const getAll = async (
   res: Response
 ) => {
   try {
-    const products =
-      await getProducts();
+    const subCategories =
+      await getSubCategories();
 
     res.status(200).json({
       success: true,
-      data: products,
+      data: subCategories,
     });
   } catch (error) {
     res.status(400).json({
@@ -79,17 +68,17 @@ export const getByCategory =
     res: Response
   ) => {
     try {
-      const slug =
-        req.params.slug as string;
+      const categoryId =
+        req.params.categoryId as string;
 
-      const products =
-        await getProductsByCategorySlug(
-          slug
+      const subCategories =
+        await getSubCategoriesByCategory(
+          categoryId
         );
 
       res.status(200).json({
         success: true,
-        data: products,
+        data: subCategories,
       });
     } catch (error) {
       res.status(400).json({
@@ -107,34 +96,24 @@ export const update = async (
   res: Response
 ) => {
   try {
-    const id = req.params.id as string;
+    const id =
+      req.params.id as string;
 
     const {
       name,
-      sku,
-      price,
-      stock,
       categoryId,
     } = req.body;
 
-    const image = req.file
-      ? `/uploads/products/${req.file.filename}`
-      : undefined;
-
-    const product =
-      await updateProduct(
+    const subCategory =
+      await updateSubCategory(
         id,
         name,
-        sku,
-        Number(price),
-        Number(stock),
-        categoryId,
-        image
+        categoryId
       );
 
     res.status(200).json({
       success: true,
-      data: product,
+      data: subCategory,
     });
   } catch (error) {
     res.status(400).json({
@@ -152,14 +131,15 @@ export const remove = async (
   res: Response
 ) => {
   try {
-    const id = req.params.id as string;
+    const id =
+      req.params.id as string;
 
-    await deleteProduct(id);
+    await deleteSubCategory(id);
 
     res.status(200).json({
       success: true,
       message:
-        "Product deleted successfully",
+        "Sub Category deleted successfully",
     });
   } catch (error) {
     res.status(400).json({

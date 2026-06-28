@@ -95,10 +95,11 @@ export default function Navbar() {
 
               {navigation.map((menu) => (
                 <NavDropdown
-                  key={menu.name}
-                  title={menu.name}
-                  items={menu.items}
-                />
+  key={menu.slug}
+  title={menu.name}
+  slug={menu.slug}
+  items={menu.items}
+/>
               ))}
             </div>
 

@@ -8,30 +8,33 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(uuid())
-  name      String
-  email     String   @unique
-  password  String
+  id String @id @default(uuid())
 
-  role      Role     @default(CUSTOMER)
+  name     String
+  email    String @unique
+  password String
+
+  role Role @default(CUSTOMER)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
 model Category {
-  id        String   @id @default(uuid())
+  id String @id @default(uuid())
 
-  name      String
-  slug      String   @unique
+  name String
+  slug String @unique
 
-  image     String?
+  image String?
 
-  isActive  Boolean  @default(true)
+  isActive Boolean @default(true)
 
-  sortOrder Int      @default(0)
+  sortOrder Int @default(0)
 
-  products  Product[]
+  products Product[]
+
+  subCategories SubCategory[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -39,29 +42,55 @@ model Category {
   @@map("categories")
 }
 
+model SubCategory {
+  id String @id @default(uuid())
+
+  name String
+  slug String @unique
+
+  image String?
+
+  isActive Boolean @default(true)
+
+  sortOrder Int @default(0)
+
+  categoryId String
+  category   Category @relation(fields: [categoryId], references: [id])
+
+  products Product[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("sub_categories")
+}
+
 model Product {
-  id          String   @id @default(uuid())
+  id String @id @default(uuid())
 
-  name        String
-  slug        String   @unique
+  name String
+  slug String @unique
 
-  sku         String   @unique
+  sku String @unique
 
   description String?
 
-  price       Float
+  price Float
 
-  stock       Int      @default(0)
+  stock Int @default(0)
 
-  image       String?
+  image String?
 
-  isActive    Boolean  @default(true)
+  isActive Boolean @default(true)
 
-  categoryId  String
-  category    Category @relation(fields: [categoryId], references: [id])
+  categoryId String
+  category   Category @relation(fields: [categoryId], references: [id])
 
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  subCategoryId String?
+  subCategory   SubCategory? @relation(fields: [subCategoryId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@map("products")
 }

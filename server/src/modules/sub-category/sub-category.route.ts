@@ -1,35 +1,25 @@
 import { Router } from "express";
 
-import upload from "../../middlewares/upload";
-
 import {
   create,
   getAll,
   getByCategory,
   update,
   remove,
-} from "./product.controller";
+} from "./sub-category.controller";
 
 const router = Router();
 
-router.post(
-  "/",
-  upload.single("image"),
-  create
-);
+router.post("/", create);
 
 router.get("/", getAll);
 
 router.get(
-  "/category/:slug",
+  "/category/:categoryId",
   getByCategory
 );
 
-router.patch(
-  "/:id",
-  upload.single("image"),
-  update
-);
+router.patch("/:id", update);
 
 router.delete("/:id", remove);
 

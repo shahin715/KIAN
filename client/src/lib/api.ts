@@ -102,7 +102,21 @@ export async function getProducts() {
 
   return response.json();
 }
+export async function getProductsByCategory(
+  slug: string
+) {
+  const response = await fetch(
+    `${API_URL}/products/category/${slug}`
+  );
 
+  if (!response.ok) {
+    throw new Error(
+      "Failed to fetch products"
+    );
+  }
+
+  return response.json();
+}
 export async function createProduct(
   formData: FormData
 ) {

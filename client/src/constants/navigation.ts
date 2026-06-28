@@ -1,6 +1,7 @@
 export const navigation = [
   {
     name: "Men",
+    slug: "men",
     items: [
       "Shirts Full Sleeve",
       "Shirts Half Sleeve",
@@ -14,6 +15,7 @@ export const navigation = [
   },
   {
     name: "Women",
+    slug: "women",
     items: [
       "Tops",
       "Kurti",
@@ -23,6 +25,7 @@ export const navigation = [
   },
   {
     name: "Punjabi",
+    slug: "punjabi",
     items: [
       "Punjabi",
       "Sherwani",
@@ -32,6 +35,7 @@ export const navigation = [
   },
   {
     name: "Kids",
+    slug: "kids",
     items: [
       "Boys",
       "Girls",
@@ -39,6 +43,7 @@ export const navigation = [
   },
   {
     name: "Accessories",
+    slug: "accessories",
     items: [
       "Bags",
       "Belt",
@@ -47,6 +52,7 @@ export const navigation = [
   },
   {
     name: "Watches",
+    slug: "watches",
     items: [
       "Tag Heuer",
       "Omega",
@@ -55,6 +61,7 @@ export const navigation = [
   },
   {
     name: "Shoes",
+    slug: "shoes",
     items: [
       "Mens",
       "Womens",
@@ -63,6 +70,7 @@ export const navigation = [
   },
   {
     name: "Others",
+    slug: "others",
     items: [],
   },
 ];

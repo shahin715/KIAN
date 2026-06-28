@@ -6,7 +6,7 @@ export default function AdminSidebar() {
   return (
     <aside
       className="
-        w-[260px]
+        w-65
         min-h-screen
         bg-black
         text-white

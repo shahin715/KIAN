@@ -52,6 +52,23 @@ export const getProducts =
     });
   };
 
+export const getProductsByCategorySlug =
+  async (slug: string) => {
+    return prisma.product.findMany({
+      where: {
+        category: {
+          slug,
+        },
+      },
+      include: {
+        category: true,
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+  };
+
 export const updateProduct =
   async (
     id: string,
