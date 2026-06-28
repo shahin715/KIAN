@@ -6,7 +6,8 @@ export const createProduct =
     sku: string,
     price: number,
     stock: number,
-    categoryId: string
+    categoryId: string,
+    image?: string | null
   ) => {
     const slug = name
       .trim()
@@ -34,6 +35,7 @@ export const createProduct =
         price,
         stock,
         categoryId,
+        image,
       },
     });
   };
@@ -57,7 +59,8 @@ export const updateProduct =
     sku: string,
     price: number,
     stock: number,
-    categoryId: string
+    categoryId: string,
+    image?: string | null
   ) => {
     const slug = name
       .trim()
@@ -75,6 +78,7 @@ export const updateProduct =
         price,
         stock,
         categoryId,
+        ...(image && { image }),
       },
     });
   };

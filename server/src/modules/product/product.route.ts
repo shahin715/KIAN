@@ -1,5 +1,7 @@
 import { Router } from "express";
 
+import upload from "../../middlewares/upload";
+
 import {
   create,
   getAll,
@@ -9,11 +11,19 @@ import {
 
 const router = Router();
 
-router.post("/", create);
+router.post(
+  "/",
+  upload.single("image"),
+  create
+);
 
 router.get("/", getAll);
 
-router.patch("/:id", update);
+router.patch(
+  "/:id",
+  upload.single("image"),
+  update
+);
 
 router.delete("/:id", remove);
 

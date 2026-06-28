@@ -20,13 +20,18 @@ export const create = async (
       categoryId,
     } = req.body;
 
+    const image = req.file
+      ? `/uploads/products/${req.file.filename}`
+      : null;
+
     const product =
       await createProduct(
         name,
         sku,
         Number(price),
         Number(stock),
-        categoryId
+        categoryId,
+        image
       );
 
     res.status(201).json({
@@ -82,6 +87,10 @@ export const update = async (
       categoryId,
     } = req.body;
 
+    const image = req.file
+      ? `/uploads/products/${req.file.filename}`
+      : undefined;
+
     const product =
       await updateProduct(
         id,
@@ -89,7 +98,8 @@ export const update = async (
         sku,
         Number(price),
         Number(stock),
-        categoryId
+        categoryId,
+        image
       );
 
     res.status(200).json({
