@@ -7,10 +7,16 @@ import {
 
 import {
   getCategories,
+  getSubCategoriesByCategory,
   updateProduct,
 } from "@/lib/api";
 
 interface Category {
+  id: string;
+  name: string;
+}
+
+interface SubCategory {
   id: string;
   name: string;
 }
@@ -21,7 +27,10 @@ interface Product {
   sku: string;
   price: number;
   stock: number;
+
   categoryId: string;
+
+  subCategoryId?: string | null;
 }
 
 interface Props {
@@ -58,9 +67,21 @@ export default function EditProductModal({
   ] = useState("");
 
   const [
+    subCategoryId,
+    setSubCategoryId,
+  ] = useState("");
+
+  const [
     categories,
     setCategories,
   ] = useState<Category[]>([]);
+
+  const [
+    subCategories,
+    setSubCategories,
+  ] = useState<
+    SubCategory[]
+  >([]);
 
   const [loading, setLoading] =
     useState(false);
@@ -70,15 +91,24 @@ export default function EditProductModal({
       return;
 
     setName(product.name);
+
     setSku(product.sku);
+
     setPrice(
       String(product.price)
     );
+
     setStock(
       String(product.stock)
     );
+
     setCategoryId(
       product.categoryId
+    );
+
+    setSubCategoryId(
+      product.subCategoryId ??
+        ""
     );
   }, [isOpen, product]);
 
@@ -101,6 +131,32 @@ export default function EditProductModal({
 
     fetchCategories();
   }, [isOpen]);
+
+  useEffect(() => {
+    if (!categoryId) {
+      setSubCategories([]);
+      setSubCategoryId("");
+      return;
+    }
+
+    const fetchSubCategories =
+      async () => {
+        try {
+          const response =
+            await getSubCategoriesByCategory(
+              categoryId
+            );
+
+          setSubCategories(
+            response.data
+          );
+        } catch (error) {
+          console.error(error);
+        }
+      };
+
+    fetchSubCategories();
+  }, [categoryId]);
 
   const handleSubmit =
     async (
@@ -141,6 +197,11 @@ export default function EditProductModal({
           categoryId
         );
 
+        formData.append(
+          "subCategoryId",
+          subCategoryId
+        );
+
         if (image) {
           formData.append(
             "image",
@@ -154,6 +215,7 @@ export default function EditProductModal({
         );
 
         onSuccess();
+
         onClose();
       } catch (error) {
         console.error(error);
@@ -164,8 +226,7 @@ export default function EditProductModal({
 
   if (!isOpen || !product)
     return null;
-
-  return (
+    return (
     <div
       className="
         fixed inset-0
@@ -286,15 +347,52 @@ export default function EditProductModal({
             "
             required
           >
+            <option value="">
+              Select Category
+            </option>
+
             {categories.map(
               (category) => (
                 <option
                   key={category.id}
-                  value={
-                    category.id
-                  }
+                  value={category.id}
                 >
                   {category.name}
+                </option>
+              )
+            )}
+          </select>
+
+          <select
+            value={subCategoryId}
+            onChange={(e) =>
+              setSubCategoryId(
+                e.target.value
+              )
+            }
+            className="
+              w-full
+              border
+              rounded
+              px-3
+              py-2
+            "
+          >
+            <option value="">
+              Select Sub Category
+            </option>
+
+            {subCategories.map(
+              (
+                subCategory
+              ) => (
+                <option
+                  key={subCategory.id}
+                  value={
+                    subCategory.id
+                  }
+                >
+                  {subCategory.name}
                 </option>
               )
             )}
@@ -305,7 +403,7 @@ export default function EditProductModal({
             accept="image/*"
             onChange={(e) =>
               setImage(
-                e.target.files?.[0] ||
+                e.target.files?.[0] ??
                   null
               )
             }

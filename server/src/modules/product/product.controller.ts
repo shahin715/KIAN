@@ -19,6 +19,7 @@ export const create = async (
       price,
       stock,
       categoryId,
+      subCategoryId,
     } = req.body;
 
     const image = req.file
@@ -32,6 +33,7 @@ export const create = async (
         Number(price),
         Number(stock),
         categoryId,
+        subCategoryId || null,
         image
       );
 
@@ -115,6 +117,7 @@ export const update = async (
       price,
       stock,
       categoryId,
+      subCategoryId,
     } = req.body;
 
     const image = req.file
@@ -129,6 +132,7 @@ export const update = async (
         Number(price),
         Number(stock),
         categoryId,
+        subCategoryId || null,
         image
       );
 

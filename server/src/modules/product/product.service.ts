@@ -7,6 +7,7 @@ export const createProduct =
     price: number,
     stock: number,
     categoryId: string,
+    subCategoryId: string | null,
     image?: string | null
   ) => {
     const slug = name
@@ -35,7 +36,12 @@ export const createProduct =
         price,
         stock,
         categoryId,
+        subCategoryId,
         image,
+      },
+      include: {
+        category: true,
+        subCategory: true,
       },
     });
   };
@@ -45,6 +51,7 @@ export const getProducts =
     return prisma.product.findMany({
       include: {
         category: true,
+        subCategory: true,
       },
       orderBy: {
         createdAt: "desc",
@@ -62,6 +69,7 @@ export const getProductsByCategorySlug =
       },
       include: {
         category: true,
+        subCategory: true,
       },
       orderBy: {
         createdAt: "desc",
@@ -77,6 +85,7 @@ export const updateProduct =
     price: number,
     stock: number,
     categoryId: string,
+    subCategoryId: string | null,
     image?: string | null
   ) => {
     const slug = name
@@ -95,7 +104,12 @@ export const updateProduct =
         price,
         stock,
         categoryId,
+        subCategoryId,
         ...(image && { image }),
+      },
+      include: {
+        category: true,
+        subCategory: true,
       },
     });
   };

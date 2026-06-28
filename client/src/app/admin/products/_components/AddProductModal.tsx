@@ -8,9 +8,15 @@ import {
 import {
   createProduct,
   getCategories,
+  getSubCategoriesByCategory,
 } from "@/lib/api";
 
 interface Category {
+  id: string;
+  name: string;
+}
+
+interface SubCategory {
   id: string;
   name: string;
 }
@@ -47,9 +53,21 @@ export default function AddProductModal({
   ] = useState("");
 
   const [
+    subCategoryId,
+    setSubCategoryId,
+  ] = useState("");
+
+  const [
     categories,
     setCategories,
   ] = useState<Category[]>([]);
+
+  const [
+    subCategories,
+    setSubCategories,
+  ] = useState<
+    SubCategory[]
+  >([]);
 
   const [loading, setLoading] =
     useState(false);
@@ -73,6 +91,32 @@ export default function AddProductModal({
 
     fetchCategories();
   }, [isOpen]);
+
+  useEffect(() => {
+    if (!categoryId) {
+      setSubCategories([]);
+      setSubCategoryId("");
+      return;
+    }
+
+    const fetchSubCategories =
+      async () => {
+        try {
+          const response =
+            await getSubCategoriesByCategory(
+              categoryId
+            );
+
+          setSubCategories(
+            response.data
+          );
+        } catch (error) {
+          console.error(error);
+        }
+      };
+
+    fetchSubCategories();
+  }, [categoryId]);
 
   const handleSubmit =
     async (
@@ -111,6 +155,11 @@ export default function AddProductModal({
           categoryId
         );
 
+        formData.append(
+          "subCategoryId",
+          subCategoryId
+        );
+
         if (image) {
           formData.append(
             "image",
@@ -127,6 +176,8 @@ export default function AddProductModal({
         setPrice("");
         setStock("");
         setCategoryId("");
+        setSubCategoryId("");
+        setSubCategories([]);
         setImage(null);
 
         onSuccess();
@@ -139,8 +190,7 @@ export default function AddProductModal({
     };
 
   if (!isOpen) return null;
-
-  return (
+    return (
     <div
       className="
         fixed inset-0
@@ -268,12 +318,48 @@ export default function AddProductModal({
             )}
           </select>
 
+          <select
+            value={subCategoryId}
+            onChange={(e) =>
+              setSubCategoryId(
+                e.target.value
+              )
+            }
+            className="
+              w-full border rounded
+              px-3 py-2
+            "
+          >
+            <option value="">
+              Select Sub Category
+            </option>
+
+            {subCategories.map(
+              (
+                subCategory
+              ) => (
+                <option
+                  key={
+                    subCategory.id
+                  }
+                  value={
+                    subCategory.id
+                  }
+                >
+                  {
+                    subCategory.name
+                  }
+                </option>
+              )
+            )}
+          </select>
+
           <input
             type="file"
             accept="image/*"
             onChange={(e) =>
               setImage(
-                e.target.files?.[0] ||
+                e.target.files?.[0] ??
                   null
               )
             }
@@ -304,8 +390,11 @@ export default function AddProductModal({
               type="submit"
               disabled={loading}
               className="
-                bg-black text-white
-                px-4 py-2 rounded
+                bg-black
+                text-white
+                px-4
+                py-2
+                rounded
               "
             >
               {loading

@@ -40,6 +40,13 @@ export default function AdminSidebar() {
         </Link>
 
         <Link
+          href="/admin/sub-categories"
+          className="block px-4 py-3 hover:bg-white/10 rounded"
+        >
+          Sub Categories
+        </Link>
+
+        <Link
           href="/admin/products"
           className="block px-4 py-3 hover:bg-white/10 rounded"
         >

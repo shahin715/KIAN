@@ -1,6 +1,10 @@
 const API_URL =
   "http://localhost:5000/api/v1";
 
+// =====================
+// Category
+// =====================
+
 export async function getCategories() {
   const response = await fetch(
     `${API_URL}/categories`
@@ -89,6 +93,120 @@ export async function deleteCategory(
   return response.json();
 }
 
+// =====================
+// Sub Category
+// =====================
+
+export async function getSubCategories() {
+  const response = await fetch(
+    `${API_URL}/sub-categories`
+  );
+
+  if (!response.ok) {
+    throw new Error(
+      "Failed to fetch sub categories"
+    );
+  }
+
+  return response.json();
+}
+
+export async function getSubCategoriesByCategory(
+  categoryId: string
+) {
+  const response = await fetch(
+    `${API_URL}/sub-categories/category/${categoryId}`
+  );
+
+  if (!response.ok) {
+    throw new Error(
+      "Failed to fetch sub categories"
+    );
+  }
+
+  return response.json();
+}
+
+export async function createSubCategory(
+  name: string,
+  categoryId: string
+) {
+  const response = await fetch(
+    `${API_URL}/sub-categories`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type":
+          "application/json",
+      },
+      body: JSON.stringify({
+        name,
+        categoryId,
+      }),
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error(
+      "Failed to create sub category"
+    );
+  }
+
+  return response.json();
+}
+
+export async function updateSubCategory(
+  id: string,
+  name: string,
+  categoryId: string
+) {
+  const response = await fetch(
+    `${API_URL}/sub-categories/${id}`,
+    {
+      method: "PATCH",
+      headers: {
+        "Content-Type":
+          "application/json",
+      },
+      body: JSON.stringify({
+        name,
+        categoryId,
+      }),
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error(
+      "Failed to update sub category"
+    );
+  }
+
+  return response.json();
+}
+
+export async function deleteSubCategory(
+  id: string
+) {
+  const response = await fetch(
+    `${API_URL}/sub-categories/${id}`,
+    {
+      method: "DELETE",
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error(
+      "Failed to delete sub category"
+    );
+  }
+
+  return response.json();
+}
+
+// =====================
+// Product
+// =====================
+
 export async function getProducts() {
   const response = await fetch(
     `${API_URL}/products`
@@ -102,6 +220,7 @@ export async function getProducts() {
 
   return response.json();
 }
+
 export async function getProductsByCategory(
   slug: string
 ) {
@@ -117,6 +236,7 @@ export async function getProductsByCategory(
 
   return response.json();
 }
+
 export async function createProduct(
   formData: FormData
 ) {

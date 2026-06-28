@@ -7,16 +7,28 @@ import EditProductModal from "./_components/EditProductModal";
 
 interface Product {
   id: string;
+
   name: string;
+
   sku: string;
+
   price: number;
+
   stock: number;
+
   image: string | null;
+
   categoryId: string;
+
+  subCategoryId: string | null;
 
   category: {
     name: string;
   };
+
+  subCategory: {
+    name: string;
+  } | null;
 }
 
 export default function ProductsPage() {
@@ -107,6 +119,9 @@ export default function ProductsPage() {
                 <th className="p-4 text-left">Stock</th>
 
                 <th className="p-4 text-left">Category</th>
+                <th className="p-4 text-left">
+  Sub Category
+</th>
 
                 <th className="p-4 text-left">Actions</th>
               </tr>
@@ -115,13 +130,13 @@ export default function ProductsPage() {
             <tbody>
               {loading ? (
                 <tr>
-                  <td colSpan={7} className="p-4">
+                  <td colSpan={8} className="p-4">
                     Loading...
                   </td>
                 </tr>
               ) : products.length === 0 ? (
                 <tr>
-                  <td colSpan={7} className="p-4">
+                  <td colSpan={8} className="p-4">
                     No products found
                   </td>
                 </tr>
@@ -157,6 +172,10 @@ export default function ProductsPage() {
                     <td className="p-4">{product.stock}</td>
 
                     <td className="p-4">{product.category.name}</td>
+                    <td className="p-4">
+  {product.subCategory?.name ??
+    "-"}
+</td>
 
                     <td className="p-4">
                       <button
