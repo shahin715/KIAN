@@ -76,6 +76,32 @@ export const getProductsByCategorySlug =
       },
     });
   };
+export const getProductsByCategoryAndSubCategory =
+  async (
+    categorySlug: string,
+    subCategorySlug: string
+  ) => {
+    return prisma.product.findMany({
+      where: {
+        category: {
+          slug: categorySlug,
+        },
+
+        subCategory: {
+          slug: subCategorySlug,
+        },
+      },
+
+      include: {
+        category: true,
+        subCategory: true,
+      },
+
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+  };
 
 export const updateProduct =
   async (

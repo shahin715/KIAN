@@ -236,6 +236,22 @@ export async function getProductsByCategory(
 
   return response.json();
 }
+export async function getProductsByCategoryAndSubCategory(
+  categorySlug: string,
+  subCategorySlug: string
+) {
+  const response = await fetch(
+    `${API_URL}/products/category/${categorySlug}/${subCategorySlug}`
+  );
+
+  if (!response.ok) {
+    throw new Error(
+      "Failed to fetch products"
+    );
+  }
+
+  return response.json();
+}
 
 export async function createProduct(
   formData: FormData
@@ -291,6 +307,20 @@ export async function deleteProduct(
   if (!response.ok) {
     throw new Error(
       "Failed to delete product"
+    );
+  }
+
+  return response.json();
+}
+
+export async function getMenuCategories() {
+  const response = await fetch(
+    `${API_URL}/categories/menu`
+  );
+
+  if (!response.ok) {
+    throw new Error(
+      "Failed to fetch menu"
     );
   }
 

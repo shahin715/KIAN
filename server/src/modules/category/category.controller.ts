@@ -3,6 +3,7 @@ import { Request, Response } from "express";
 import {
   createCategory,
   getCategories,
+  getMenuCategories,
   updateCategory,
   deleteCategory,
 } from "./category.service";
@@ -54,6 +55,30 @@ export const getAll = async (
     });
   }
 };
+
+export const getMenu =
+  async (
+    req: Request,
+    res: Response
+  ) => {
+    try {
+      const categories =
+        await getMenuCategories();
+
+      res.status(200).json({
+        success: true,
+        data: categories,
+      });
+    } catch (error) {
+      res.status(400).json({
+        success: false,
+        message:
+          error instanceof Error
+            ? error.message
+            : "Something went wrong",
+      });
+    }
+  };
 
 export const update = async (
   req: Request,

@@ -4,6 +4,7 @@ import {
   createProduct,
   getProducts,
   getProductsByCategorySlug,
+  getProductsByCategoryAndSubCategory,
   updateProduct,
   deleteProduct,
 } from "./product.service";
@@ -103,6 +104,40 @@ export const getByCategory =
       });
     }
   };
+
+ export const getByCategoryAndSubCategory = async (
+  req: Request<{
+    categorySlug: string;
+    subCategorySlug: string;
+  }>,
+  res: Response
+) => {
+  try {
+    const {
+      categorySlug,
+      subCategorySlug,
+    } = req.params;
+
+    const products =
+      await getProductsByCategoryAndSubCategory(
+        categorySlug,
+        subCategorySlug
+      );
+
+    res.status(200).json({
+      success: true,
+      data: products,
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      message:
+        error instanceof Error
+          ? error.message
+          : "Something went wrong",
+    });
+  }
+};
 
 export const update = async (
   req: Request,

@@ -6,6 +6,7 @@ import {
   create,
   getAll,
   getByCategory,
+  getByCategoryAndSubCategory,
   update,
   remove,
 } from "./product.controller";
@@ -19,6 +20,11 @@ router.post(
 );
 
 router.get("/", getAll);
+
+router.get(
+  "/category/:categorySlug/:subCategorySlug",
+  getByCategoryAndSubCategory
+);
 
 router.get(
   "/category/:slug",

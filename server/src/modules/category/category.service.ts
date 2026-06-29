@@ -25,6 +25,37 @@ export const getCategories =
     });
   };
 
+  export const getMenuCategories =
+  async () => {
+    return prisma.category.findMany({
+      where: {
+        isActive: true,
+      },
+
+      include: {
+        subCategories: {
+          where: {
+            isActive: true,
+          },
+
+          orderBy: {
+            sortOrder: "asc",
+          },
+
+          select: {
+            id: true,
+            name: true,
+            slug: true,
+          },
+        },
+      },
+
+      orderBy: {
+        sortOrder: "asc",
+      },
+    });
+  };
+
 export const updateCategory =
   async (
     id: string,

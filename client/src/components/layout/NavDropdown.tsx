@@ -1,12 +1,22 @@
 "use client";
 
-import { useRef, useState } from "react";
+import {
+  useRef,
+  useState,
+} from "react";
+
 import Link from "next/link";
+
+interface SubCategory {
+  id: string;
+  name: string;
+  slug: string;
+}
 
 interface NavDropdownProps {
   title: string;
   slug: string;
-  items: string[];
+  items: SubCategory[];
 }
 
 export default function NavDropdown({
@@ -52,9 +62,9 @@ export default function NavDropdown({
       <Link
         href={`/categories/${slug}`}
         className="
-          text-white/75
+          text-white/80
           hover:text-white
-          transition
+          transition-colors
           text-[13px]
           tracking-[0.5px]
         "
@@ -66,37 +76,44 @@ export default function NavDropdown({
         items.length > 0 && (
           <div
             className="
-              absolute
-              top-full
-              left-1/2
-              -translate-x-1/2
-              mt-1
-              w-80
-              bg-white
-              rounded
-              shadow-xl
-              py-3
-              z-50
+             absolute
+  top-full
+  left-1/2
+  -translate-x-1/2
+  mt-3
+  min-w-70
+  bg-white
+  rounded-lg
+  border
+  border-gray-200
+  shadow-2xl
+  py-2
+  overflow-hidden
+  z-50
             "
           >
             {items.map((item) => (
-              <button
-                key={item}
+              <Link
+                key={item.id}
+                href={`/categories/${slug}/${item.slug}`}
+                prefetch={false}
                 className="
-                  block
-                  w-full
-                  text-left
-                  px-10
-                  py-2.5
-                  text-base
-                  text-gray-600
-                  hover:bg-gray-100
-                  hover:text-black
-                  transition
+             block
+  px-6
+  py-3
+  text-[15px]
+  font-normal
+  text-gray-600
+  tracking-wide
+  transition-all
+  duration-200
+  hover:bg-[#f5f5f5]
+  hover:text-[#111111]
+  hover:font-medium
                 "
               >
-                {item}
-              </button>
+                {item.name}
+              </Link>
             ))}
           </div>
         )}
